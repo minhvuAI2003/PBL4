@@ -275,7 +275,7 @@ public class TCPchat extends JFrame {
 							System.exit(ABORT);
 						}
 						if (dangky.equals("OK")) {
-
+							tai = tk;
 							cl.show(contentPane, "name_36411562135800");
 
 							DefaultComboBoxModel<String> name_list = new DefaultComboBoxModel<String>();
@@ -338,7 +338,7 @@ public class TCPchat extends JFrame {
 						String reply = dis.readUTF();
 						System.out.println(reply);
 						if (reply.equals("ok")) {
-
+							tai = tk;
 							cl.show(contentPane, "name_36411562135800");
 							DefaultComboBoxModel<String> name_list = new DefaultComboBoxModel<String>();
 							int soluong_1 = Integer.parseInt(dis.readUTF());
@@ -388,18 +388,26 @@ public class TCPchat extends JFrame {
 
 								String message1 = dis.readUTF();
 								String nm = dis.readUTF();
+								String tb = dis.readUTF();
+								System.out.println(message1);
+								System.out.println(nm);
+								System.out.println(tb);
+								if (tb.equals("end")) {
+									JOptionPane.showMessageDialog(contentPane, tai + " da thoat");
+									Thread.sleep(1000);
+									System.exit(1);
+								}
 								if (nm.equals(ten)) {
 									textArea.setText(message1);
 									text = message1;
 								}
-								System.out.println(comboBox.getSelectedItem());
 
 								comboBox.setEditable(false);
 								if (!nm.equals(ten)) {
 									JOptionPane.showMessageDialog(contentPane, "Ban co tin nhan moi tu " + nm);
 								}
 
-							} catch (IOException e1) {
+							} catch (IOException | InterruptedException e1) {
 								loop = false;
 							}
 
@@ -458,7 +466,10 @@ public class TCPchat extends JFrame {
 				{
 					try {
 						DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
+						DataInputStream dis = new DataInputStream(sc.getInputStream());
+
 						dos.writeUTF(st);
+
 						dos.writeUTF(tr);
 						dos.writeUTF(ten);
 					} catch (IOException e1) {
