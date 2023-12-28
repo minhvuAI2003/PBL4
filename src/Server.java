@@ -327,6 +327,7 @@ public class Server {
 									}
 								}
 							}
+						int idd = 0;
 						boolean loop = true;
 						while (loop) {
 
@@ -335,14 +336,15 @@ public class Server {
 								System.out.println("Hello  World");
 								String st = dis1.readUTF();
 								System.out.println(st);
+
 								String tr = dis1.readUTF();
 								System.out.println(tr);
 								String name = dis1.readUTF();
 								System.out.println(name);
-								int idd = 0;
+
 								for (int i = 0; i < Clientlist.size(); i++) {
 									if (Clientlist.get(i).gettk().equals(name)) {
-										idd += i;
+										idd = i;
 										break;
 									}
 								}
@@ -364,7 +366,7 @@ public class Server {
 									Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()] = tk1 + "\r\n\r\n"
 											+ st;
 
-								//System.out.println(Clientlist.get(idd).sc.getOutputStream());
+								// System.out.println(Clientlist.get(idd).sc.getOutputStream());
 								update(Clientlist.get(idd).gettk(), Clientlist.get(b).gettk(),
 										Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
 								if (kiemtra(Clientlist, Clientlist.get(idd).sc, idd)) {
@@ -374,13 +376,23 @@ public class Server {
 									// System.out.println(
 									// Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
 									dos1.writeUTF(Clientlist.get(b).gettk());
+									dos1.writeUTF("chua end");
 									// System.out.println(Clientlist.get(b).gettk());
 								}
-
 							} catch (IOException e) {
 
 								loop = false;
 								OnlineClient.remove(this);
+								if (kiemtra(Clientlist, Clientlist.get(idd).sc, idd)) {
+									DataOutputStream dos1 = new DataOutputStream(
+											Clientlist.get(idd).sc.getOutputStream());
+									dos1.writeUTF("");
+									// System.out.println(
+									// Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
+									dos1.writeUTF("");
+									dos1.writeUTF("end");
+									// System.out.println(Clientlist.get(b).gettk());
+								}
 							}
 
 						}
