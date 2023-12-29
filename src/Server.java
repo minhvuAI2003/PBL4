@@ -402,11 +402,11 @@ public class Server {
 							}
 
 					} catch (IOException | SQLException e) {
-						// TODO Auto-generated catch block
 
+						OnlineClient.remove(this);
 					}
 				} catch (IOException | SQLException e) {
-
+					OnlineClient.remove(this);
 				}
 
 			}
