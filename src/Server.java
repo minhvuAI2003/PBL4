@@ -334,7 +334,9 @@ public class Server {
 						if (ck == 1)
 
 							while (loop) {
-
+								Vector<client> vector11 = fetchalluser(sockets, ID);
+								Clientlist.clear();
+								Clientlist = vector11;
 								try {
 									DataInputStream dis1 = new DataInputStream(sc.getInputStream());
 									System.out.println("Hello  World");
