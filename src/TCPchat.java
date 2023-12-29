@@ -462,7 +462,7 @@ public class TCPchat extends JFrame {
 				else
 					text += "\r\n\r\n" + tr;
 				textArea.setText(text);
-				textArea.setEditable(true);
+
 				{
 					try {
 						DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
