@@ -234,7 +234,7 @@ public class Server {
 			{
 				DataOutputStream dos;
 				try {
-
+					int ck = 0;
 					dos = new DataOutputStream(sc.getOutputStream());
 					System.out.println(sc.getOutputStream());
 					DataInputStream dis = new DataInputStream(sc.getInputStream());
@@ -252,6 +252,7 @@ public class Server {
 								dos.writeUTF("ot");
 								check = check(tk, mk);
 								if (check == true) {
+									ck = 1;
 									dos.writeUTF("ok");
 									System.out.println("we");
 									this.settk(tk);
@@ -275,6 +276,7 @@ public class Server {
 						if (checktk1(tk)) {
 							dos.writeUTF("not OK");
 						} else {
+							ck = 1;
 							dos.writeUTF("OK");
 							this.settk(tk);
 							this.setmk(mk);
@@ -327,75 +329,77 @@ public class Server {
 									}
 								}
 							}
-						int idd = 0;
 						boolean loop = true;
-						while (loop) {
+						int idd = 0;
+						if (ck == 1)
 
-							try {
-								DataInputStream dis1 = new DataInputStream(sc.getInputStream());
-								System.out.println("Hello  World");
-								String st = dis1.readUTF();
-								System.out.println(st);
+							while (loop) {
 
-								String tr = dis1.readUTF();
-								System.out.println(tr);
-								String name = dis1.readUTF();
-								System.out.println(name);
+								try {
+									DataInputStream dis1 = new DataInputStream(sc.getInputStream());
+									System.out.println("Hello  World");
+									String st = dis1.readUTF();
+									System.out.println(st);
 
-								for (int i = 0; i < Clientlist.size(); i++) {
-									if (Clientlist.get(i).gettk().equals(name)) {
-										idd = i;
-										break;
+									String tr = dis1.readUTF();
+									System.out.println(tr);
+									String name = dis1.readUTF();
+									System.out.println(name);
+
+									for (int i = 0; i < Clientlist.size(); i++) {
+										if (Clientlist.get(i).gettk().equals(name)) {
+											idd = i;
+											break;
+										}
+									}
+									String message = (String) Message[Clientlist.get(b).getid()][Clientlist.get(idd)
+											.getid()];
+									if (!message.equals(""))
+										message += "\r\n\r\n" + tr;
+									else
+										message = tr;
+									Message[Clientlist.get(b).getid()][Clientlist.get(idd).getid()] = message;
+									System.out.println(Message[Clientlist.get(b).getid()][Clientlist.get(idd).getid()]);
+									update(Clientlist.get(b).gettk(), Clientlist.get(idd).gettk(), message);
+
+									String tk1 = Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()];
+									if (tk1.equals("")) {
+										tk1 = "";
+										Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()] = st;
+									} else
+										Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()] = tk1
+												+ "\r\n\r\n" + st;
+
+									// System.out.println(Clientlist.get(idd).sc.getOutputStream());
+									update(Clientlist.get(idd).gettk(), Clientlist.get(b).gettk(),
+											Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
+									if (kiemtra(Clientlist, Clientlist.get(idd).sc, idd)) {
+										DataOutputStream dos1 = new DataOutputStream(
+												Clientlist.get(idd).sc.getOutputStream());
+										dos1.writeUTF(Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
+										// System.out.println(
+										// Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
+										dos1.writeUTF(Clientlist.get(b).gettk());
+										dos1.writeUTF("chua end");
+										// System.out.println(Clientlist.get(b).gettk());
+									}
+								} catch (IOException e) {
+
+									loop = false;
+									OnlineClient.remove(this);
+									if (kiemtra(Clientlist, Clientlist.get(idd).sc, idd)) {
+										DataOutputStream dos1 = new DataOutputStream(
+												Clientlist.get(idd).sc.getOutputStream());
+										dos1.writeUTF("");
+										// System.out.println(
+										// Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
+										dos1.writeUTF("");
+										dos1.writeUTF("end");
+										// System.out.println(Clientlist.get(b).gettk());
 									}
 								}
-								String message = (String) Message[Clientlist.get(b).getid()][Clientlist.get(idd)
-										.getid()];
-								if (message != null)
-									message += "\r\n\r\n" + tr;
-								else
-									message = tr;
-								Message[Clientlist.get(b).getid()][Clientlist.get(idd).getid()] = message;
-								System.out.println(Message[Clientlist.get(b).getid()][Clientlist.get(idd).getid()]);
-								update(Clientlist.get(b).gettk(), Clientlist.get(idd).gettk(), message);
 
-								String tk1 = Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()];
-								if (tk1 == null) {
-									tk1 = "";
-									Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()] = st;
-								} else
-									Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()] = tk1 + "\r\n\r\n"
-											+ st;
-
-								// System.out.println(Clientlist.get(idd).sc.getOutputStream());
-								update(Clientlist.get(idd).gettk(), Clientlist.get(b).gettk(),
-										Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
-								if (kiemtra(Clientlist, Clientlist.get(idd).sc, idd)) {
-									DataOutputStream dos1 = new DataOutputStream(
-											Clientlist.get(idd).sc.getOutputStream());
-									dos1.writeUTF(Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
-									// System.out.println(
-									// Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
-									dos1.writeUTF(Clientlist.get(b).gettk());
-									dos1.writeUTF("chua end");
-									// System.out.println(Clientlist.get(b).gettk());
-								}
-							} catch (IOException e) {
-
-								loop = false;
-								OnlineClient.remove(this);
-								if (kiemtra(Clientlist, Clientlist.get(idd).sc, idd)) {
-									DataOutputStream dos1 = new DataOutputStream(
-											Clientlist.get(idd).sc.getOutputStream());
-									dos1.writeUTF("");
-									// System.out.println(
-									// Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
-									dos1.writeUTF("");
-									dos1.writeUTF("end");
-									// System.out.println(Clientlist.get(b).gettk());
-								}
 							}
-
-						}
 
 					} catch (IOException | SQLException e) {
 						// TODO Auto-generated catch block
