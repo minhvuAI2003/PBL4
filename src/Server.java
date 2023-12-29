@@ -393,7 +393,7 @@ public class Server {
 										dos1.writeUTF("");
 										// System.out.println(
 										// Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
-										dos1.writeUTF("");
+										dos1.writeUTF(Clientlist.get(b).gettk());
 										dos1.writeUTF("end");
 										// System.out.println(Clientlist.get(b).gettk());
 									}

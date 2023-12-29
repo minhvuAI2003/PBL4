@@ -405,6 +405,9 @@ public class TCPchat extends JFrame {
 								comboBox.setEditable(false);
 								if (!nm.equals(ten)) {
 									JOptionPane.showMessageDialog(contentPane, "Ban co tin nhan moi tu " + nm);
+									JOptionPane.showMessageDialog(contentPane,
+											"Noi dung tin nhan:\n" + message1.substring(message.get(nm).length() + 2));
+									message.put(nm, message1);
 								}
 
 							} catch (IOException | InterruptedException e1) {
