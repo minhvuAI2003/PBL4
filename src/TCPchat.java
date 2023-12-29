@@ -270,7 +270,7 @@ public class TCPchat extends JFrame {
 						dos.writeUTF(mk);
 						String dangky = dis.readUTF();
 						if (dangky.equals("not OK")) {
-							lblNewLabel_7.setText("Gmail đã tồn tại!!!");
+							JOptionPane.showMessageDialog(contentPane, "Gmail da ton tai!!!");
 							Thread.sleep(1000);
 							System.exit(ABORT);
 						}
@@ -353,8 +353,8 @@ public class TCPchat extends JFrame {
 						} else {
 							textField.setText("");
 							passwordField.setText("");
-							lblNewLabel_6.setText("Sai ten gmail hoac mat khau!!!");
-							Thread.sleep(3000);
+							JOptionPane.showMessageDialog(contentPane, "Sai ten gmail hoac mat khau!!!");
+							Thread.sleep(1000);
 							System.exit(ABORT);
 
 						}
