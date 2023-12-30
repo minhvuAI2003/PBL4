@@ -2,10 +2,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
-
 import java.awt.CardLayout;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -21,17 +18,14 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
-import java.awt.BorderLayout;
 
 public class TCPchat extends JFrame {
 	String ten = "";
@@ -44,8 +38,7 @@ public class TCPchat extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_2;
-	private JTextField textField_5;
-	private JTabbedPane tabbedPane;
+
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
 	private JPasswordField passwordField_2;
@@ -202,8 +195,12 @@ public class TCPchat extends JFrame {
 		scrollPane_1.setViewportView(textArea_1);
 
 		JLabel lblNewLabel_8 = new JLabel("");
-		lblNewLabel_8.setBounds(10, 11, 202, 14);
+		lblNewLabel_8.setBounds(10, 11, 201, 21);
 		panel_2.add(lblNewLabel_8);
+
+		JLabel lblNewLabel_9 = new JLabel("New label");
+		lblNewLabel_9.setBounds(228, 11, 66, 21);
+		panel_2.add(lblNewLabel_9);
 
 		JPanel panel_3 = new JPanel();
 		contentPane.add(panel_3, "name_36411562135800");
@@ -265,6 +262,7 @@ public class TCPchat extends JFrame {
 						passwordField_2.setText("");
 
 					} else {
+						dos.writeUTF("dndk");
 						dos.writeUTF("dang ky");
 						dos.writeUTF(tk);
 						dos.writeUTF(mk);
@@ -307,6 +305,7 @@ public class TCPchat extends JFrame {
 				System.out.println(tk + " " + mk);
 				try {
 					sc = new Socket("169.254.165.83", 1134);
+
 					DataInputStream dis = new DataInputStream(sc.getInputStream());
 					DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
 
@@ -323,6 +322,8 @@ public class TCPchat extends JFrame {
 						lblNewLabel_6.setText("Khong dung dinh dang gmail!!!");
 
 					} else {
+						dos.writeUTF("dndk");
+
 						dos.writeUTF("dang nhap");
 						dos.writeUTF(tk);
 
@@ -340,6 +341,7 @@ public class TCPchat extends JFrame {
 						if (reply.equals("ok")) {
 							tai = tk;
 							cl.show(contentPane, "name_36411562135800");
+
 							DefaultComboBoxModel<String> name_list = new DefaultComboBoxModel<String>();
 							int soluong_1 = Integer.parseInt(dis.readUTF());
 							for (int i = 0; i < soluong_1; i++) {
@@ -372,15 +374,42 @@ public class TCPchat extends JFrame {
 				try {
 					dis = new DataInputStream(sc.getInputStream());
 
-					DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
 					ten = (String) comboBox.getSelectedItem();
 					cl.show(contentPane, "name_55589903713200");
-
-					Vector<String> list = new Vector<String>();
 
 					textArea.setText(message.get(ten));
 					text = message.get(ten);
 					lblNewLabel_8.setText(ten);
+
+					new Thread(() -> {
+						Socket sc1;
+
+						try {
+							sc1 = new Socket("169.254.165.83", 1134);
+							DataOutputStream dos1 = new DataOutputStream(sc1.getOutputStream());
+
+							dos1.writeUTF("status");
+
+							while (true) {
+
+								dos1.writeUTF(ten);
+								DataInputStream dis1 = new DataInputStream(sc1.getInputStream());
+								String sockett = dis1.readUTF();
+								if (sockett.equals("")) {
+									lblNewLabel_9.setText("offline");
+									lblNewLabel_9.setForeground(Color.gray);
+								} else {
+									lblNewLabel_9.setText("online");
+									lblNewLabel_9.setForeground(Color.green);
+								}
+
+							}
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}).start();
+
 					new Thread(() -> {
 						boolean loop = true;
 						while (loop)
@@ -392,10 +421,7 @@ public class TCPchat extends JFrame {
 								System.out.println(message1);
 								System.out.println(nm);
 								System.out.println(tb);
-								if (tb.equals("end")) {
-									JOptionPane.showMessageDialog(contentPane, nm + " da thoat");
 
-								}
 								if (nm.equals(ten)) {
 									textArea.setText(message1);
 									text = message1;
@@ -472,7 +498,6 @@ public class TCPchat extends JFrame {
 				{
 					try {
 						DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
-						DataInputStream dis = new DataInputStream(sc.getInputStream());
 
 						dos.writeUTF(st);
 
