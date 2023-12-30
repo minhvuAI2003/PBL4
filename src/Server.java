@@ -330,7 +330,7 @@ public class Server {
 								}
 							}
 						boolean loop = true;
-						int idd = 0;
+						int idd = 1;
 						if (ck == 1)
 
 							while (loop) {

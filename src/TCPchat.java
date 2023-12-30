@@ -394,8 +394,7 @@ public class TCPchat extends JFrame {
 								System.out.println(tb);
 								if (tb.equals("end")) {
 									JOptionPane.showMessageDialog(contentPane, nm + " da thoat");
-									Thread.sleep(1000);
-									System.exit(1);
+
 								}
 								if (nm.equals(ten)) {
 									textArea.setText(message1);
