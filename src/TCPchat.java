@@ -413,7 +413,7 @@ public class TCPchat extends JFrame {
 									message.put(nm, message1);
 								}
 
-							} catch (IOException | InterruptedException e1) {
+							} catch (IOException e1) {
 								loop = false;
 							}
 
