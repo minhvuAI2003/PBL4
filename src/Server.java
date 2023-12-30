@@ -49,8 +49,8 @@ public class Server {
 
 	}
 
-	public boolean kiemtra(Vector<client> clientlist2, Socket gettk, int i1) {
-		if (gettk == null)
+	public boolean kiemtra(Vector<client> clientlist2, Socket gettk, int i1) throws IOException {
+		if (gettk == null || gettk.getOutputStream() == null)
 			return false;
 		for (int i = 0; i < clientlist2.size(); i++)
 			if (clientlist2.get(i).sc != null)
@@ -375,20 +375,28 @@ public class Server {
 									// System.out.println(Clientlist.get(idd).sc.getOutputStream());
 									update(Clientlist.get(idd).gettk(), Clientlist.get(b).gettk(),
 											Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
-									if (kiemtra(Clientlist, Clientlist.get(idd).sc, idd)) {
-										DataOutputStream dos1 = new DataOutputStream(
-												Clientlist.get(idd).sc.getOutputStream());
-										dos1.writeUTF(Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
-										// System.out.println(
-										// Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
-										dos1.writeUTF(Clientlist.get(b).gettk());
-										dos1.writeUTF("chua end");
-										// System.out.println(Clientlist.get(b).gettk());
-									}
+									if (sockets.get(Clientlist.get(idd).gettk()) != null)
+										if (kiemtra(Clientlist, Clientlist.get(idd).sc, idd)) {
+											System.out.println(kiemtra(Clientlist, Clientlist.get(idd).sc, idd));
+											System.out.println(Clientlist.get(idd).sc.getOutputStream());
+											System.out.println(Clientlist.get(idd).sc.getInputStream());
+
+											DataOutputStream dos1 = new DataOutputStream(
+													Clientlist.get(idd).sc.getOutputStream());
+											dos1.writeUTF(
+													Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
+											// System.out.println(
+											// Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
+											dos1.writeUTF(Clientlist.get(b).gettk());
+											dos1.writeUTF("chua end");
+											// System.out.println(Clientlist.get(b).gettk());
+										}
+									System.out.print(loop);
 								} catch (IOException e) {
 
 									loop = false;
 									OnlineClient.remove(this);
+									sockets.put(Clientlist.get(b).gettk(), null);
 									if (kiemtra(Clientlist, Clientlist.get(idd).sc, idd)) {
 										DataOutputStream dos1 = new DataOutputStream(
 												Clientlist.get(idd).sc.getOutputStream());
