@@ -400,7 +400,7 @@ public class Server {
 									if (kiemtra(Clientlist, Clientlist.get(idd).sc, idd)) {
 										DataOutputStream dos1 = new DataOutputStream(
 												Clientlist.get(idd).sc.getOutputStream());
-										dos1.writeUTF("");
+										dos1.writeUTF(Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
 										// System.out.println(
 										// Message[Clientlist.get(idd).getid()][Clientlist.get(b).getid()]);
 										dos1.writeUTF(Clientlist.get(b).gettk());
