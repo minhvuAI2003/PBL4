@@ -389,7 +389,7 @@ public class Server {
 								if (check == true) {
 									ck = 1;
 									dos.writeUTF("ok");
-									System.out.println("we");
+									//System.out.println("we");
 									this.settk(tk);
 									this.setmk(mk);
 									this.setid(layID(tk));

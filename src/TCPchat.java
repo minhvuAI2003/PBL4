@@ -231,9 +231,6 @@ public class TCPchat extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				try {
-					sc = new Socket("169.254.165.83", 1134);
-					DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
-					DataInputStream dis = new DataInputStream(sc.getInputStream());
 
 					String tk = textField_2.getText();
 					char[] b = passwordField_1.getPassword();
@@ -257,7 +254,7 @@ public class TCPchat extends JFrame {
 						textField_2.setText("");
 						passwordField_1.setText("");
 						passwordField_2.setText("");
-					} else if (!tk.contains("@gmail.com")) {
+					} else if (tk.length() < 10 || !tk.substring(tk.length() - 10).equals("@gmail.com")) {
 						textField_2.setText("");
 						passwordField_1.setText("");
 						passwordField_2.setText("");
@@ -270,6 +267,9 @@ public class TCPchat extends JFrame {
 						passwordField_2.setText("");
 
 					} else {
+						sc = new Socket("169.254.165.83", 1134);
+						DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
+						DataInputStream dis = new DataInputStream(sc.getInputStream());
 						dos.writeUTF("dndk");
 						dos.writeUTF("dang ky");
 						dos.writeUTF(tk);
@@ -281,6 +281,7 @@ public class TCPchat extends JFrame {
 							System.exit(ABORT);
 						}
 						if (dangky.equals("OK")) {
+
 							tai = tk;
 							cl.show(contentPane, "name_36411562135800");
 
@@ -316,10 +317,8 @@ public class TCPchat extends JFrame {
 				String mk = String.valueOf(b);
 				System.out.println(tk + " " + mk);
 				try {
-					sc = new Socket("169.254.165.83", 1134);
 
-					DataInputStream dis = new DataInputStream(sc.getInputStream());
-					DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
+				
 
 					if (tk.equals("")) {
 						lblNewLabel_6.setText("Hãy nhập tên tài khoản!!!");
@@ -328,19 +327,23 @@ public class TCPchat extends JFrame {
 					} else if (mk.equals("")) {
 						lblNewLabel_6.setText("Hãy nhập mật khẩu!!!");
 						textField.setText("");
-					} else if (!tk.contains("@gmail.com")) {
+					} else if (tk.length() < 10 || !tk.substring(tk.length() - 10).equals("@gmail.com")) {
 						passwordField.setText("");
 						textField.setText("");
 						lblNewLabel_6.setText("Khong dung dinh dang gmail!!!");
 
 					} else {
-						dos.writeUTF("dndk");
 
-						dos.writeUTF("dang nhap");
-						dos.writeUTF(tk);
+						sc = new Socket("169.254.165.83", 1134);
+						DataOutputStream dos1 = new DataOutputStream(sc.getOutputStream());
+						DataInputStream dis11 = new DataInputStream(sc.getInputStream());
+						dos1.writeUTF("dndk");
 
-						dos.writeUTF(mk);
-						String kq = dis.readUTF();
+						dos1.writeUTF("dang nhap");
+						dos1.writeUTF(tk);
+
+						dos1.writeUTF(mk);
+						String kq = dis11.readUTF();
 						System.out.println(kq);
 						if (kq.equals("out")) {
 							JOptionPane.showMessageDialog(contentPane,
@@ -348,25 +351,25 @@ public class TCPchat extends JFrame {
 							Thread.sleep(1000);
 							System.exit(ABORT);
 						}
-						String reply = dis.readUTF();
+						String reply = dis11.readUTF();
 						System.out.println(reply);
 						if (reply.equals("ok")) {
 							tai = tk;
 							cl.show(contentPane, "name_36411562135800");
 
 							DefaultComboBoxModel<String> name_list = new DefaultComboBoxModel<String>();
-							int soluong_1 = Integer.parseInt(dis.readUTF());
+							int soluong_1 = Integer.parseInt(dis11.readUTF());
 							for (int i = 0; i < soluong_1; i++) {
-								name_list.addElement(dis.readUTF());
+								name_list.addElement(dis11.readUTF());
 							}
 							comboBox.setModel(name_list);
 							for (int i = 0; i < soluong_1; i++) {
-								message.put(comboBox.getItemAt(i), dis.readUTF());
+								message.put(comboBox.getItemAt(i), dis11.readUTF());
 							}
 							for (int i = 0; i < soluong_1; i++)
-								block.put(comboBox.getItemAt(i), dis.readUTF());
+								block.put(comboBox.getItemAt(i), dis11.readUTF());
 							for (int i = 0; i < soluong_1; i++)
-								block1.put(comboBox.getItemAt(i), dis.readUTF());
+								block1.put(comboBox.getItemAt(i), dis11.readUTF());
 
 						} else {
 							textField.setText("");
