@@ -33,6 +33,9 @@ public class TCPchat extends JFrame {
 	Socket sc;
 	Map<String, Socket> sockets = new HashMap<String, Socket>();
 	Map<String, String> message = new HashMap<String, String>();
+	Map<String, String> block = new HashMap<String, String>();
+	Map<String, String> block1 = new HashMap<String, String>();
+
 	String tai = "";
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -202,6 +205,11 @@ public class TCPchat extends JFrame {
 		lblNewLabel_9.setBounds(228, 11, 66, 21);
 		panel_2.add(lblNewLabel_9);
 
+		JButton btnNewButton_5 = new JButton("");
+
+		btnNewButton_5.setBounds(335, 11, 89, 21);
+		panel_2.add(btnNewButton_5);
+
 		JPanel panel_3 = new JPanel();
 		contentPane.add(panel_3, "name_36411562135800");
 		panel_3.setLayout(null);
@@ -285,6 +293,10 @@ public class TCPchat extends JFrame {
 							for (int i = 0; i < soluong_1; i++) {
 								message.put(comboBox.getItemAt(i), dis.readUTF());
 							}
+							for (int i = 0; i < soluong_1; i++)
+								block.put(comboBox.getItemAt(i), dis.readUTF());
+							for (int i = 0; i < soluong_1; i++)
+								block1.put(comboBox.getItemAt(i), dis.readUTF());
 						}
 
 					}
@@ -351,6 +363,10 @@ public class TCPchat extends JFrame {
 							for (int i = 0; i < soluong_1; i++) {
 								message.put(comboBox.getItemAt(i), dis.readUTF());
 							}
+							for (int i = 0; i < soluong_1; i++)
+								block.put(comboBox.getItemAt(i), dis.readUTF());
+							for (int i = 0; i < soluong_1; i++)
+								block1.put(comboBox.getItemAt(i), dis.readUTF());
 
 						} else {
 							textField.setText("");
@@ -367,91 +383,8 @@ public class TCPchat extends JFrame {
 				}
 			}
 		});
-		btnNewButton_4.addActionListener(new ActionListener() {
+		ActionListener ac = new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				DataInputStream dis;
-				try {
-					dis = new DataInputStream(sc.getInputStream());
-
-					ten = (String) comboBox.getSelectedItem();
-					cl.show(contentPane, "name_55589903713200");
-
-					textArea.setText(message.get(ten));
-					text = message.get(ten);
-					lblNewLabel_8.setText(ten);
-
-					new Thread(() -> {
-						Socket sc1;
-
-						try {
-							sc1 = new Socket("169.254.165.83", 1134);
-							DataOutputStream dos1 = new DataOutputStream(sc1.getOutputStream());
-
-							dos1.writeUTF("status");
-
-							while (true) {
-
-								dos1.writeUTF(ten);
-								DataInputStream dis1 = new DataInputStream(sc1.getInputStream());
-								String sockett = dis1.readUTF();
-								if (sockett.equals("")) {
-									lblNewLabel_9.setText("offline");
-									lblNewLabel_9.setForeground(Color.gray);
-								} else {
-									lblNewLabel_9.setText("online");
-									lblNewLabel_9.setForeground(Color.green);
-								}
-
-							}
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}).start();
-
-					new Thread(() -> {
-						boolean loop = true;
-						while (loop)
-							try {
-
-								String message1 = dis.readUTF();
-								String nm = dis.readUTF();
-								String tb = dis.readUTF();
-								System.out.println(message1);
-								System.out.println(nm);
-								System.out.println(tb);
-
-								if (nm.equals(ten)) {
-									textArea.setText(message1);
-									text = message1;
-								}
-
-								comboBox.setEditable(false);
-								if (!nm.equals(ten)) {
-									JOptionPane.showMessageDialog(contentPane, "Ban co tin nhan moi tu " + nm);
-									if (message.get(nm).length() != 0)
-										JOptionPane.showMessageDialog(contentPane, "Noi dung tin nhan:\n"
-												+ message1.substring(message.get(nm).length() + 2));
-									else
-										JOptionPane.showMessageDialog(contentPane,
-												"Noi dung tin nhan:\n" + message1.substring(0));
-									message.put(nm, message1);
-								}
-
-							} catch (IOException e1) {
-								loop = false;
-							}
-
-					}).start();
-
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String message = textArea_1.getText();
 				;
@@ -488,30 +421,175 @@ public class TCPchat extends JFrame {
 					tr += mes[i];
 				}
 
-				System.out.println(tr);
+				// System.out.println(tr);
 				if (text.equals(""))
 					text = tr;
 				else
 					text += "\r\n\r\n" + tr;
-				textArea.setText(text);
+				if (block.get(ten).equals("true") || block1.get(ten).equals("true"))
+					JOptionPane.showMessageDialog(contentPane, "Hien khong the chat voi nguoi dung nay");
+				else {
+					textArea.setText(text);
+					if (!message.equals("")) {
+						try {
+							DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
 
-				{
-					try {
-						DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
+							dos.writeUTF(st);
 
-						dos.writeUTF(st);
-
-						dos.writeUTF(tr);
-						dos.writeUTF(ten);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+							dos.writeUTF(tr);
+							dos.writeUTF(ten);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
-				;
 
 			}
+		};
+		;
+
+		btnNewButton_5.addActionListener(new ActionListener() {
+			int count = 1;
+
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (count % 2 == 1) {
+						btnNewButton_5.setText("Unblock");
+					} else {
+						btnNewButton_5.setText("Block");
+
+					}
+					count += 1;
+
+					Socket sc = new Socket("169.254.165.83", 1134);
+					DataOutputStream dos = new DataOutputStream(sc.getOutputStream());
+					dos.writeUTF("block");
+					if ((count - 1) % 2 == 1) {
+						dos.writeUTF("true");
+						block.put(ten, "true");
+					} else {
+						dos.writeUTF("false");
+						block.put(ten, "false");
+					}
+					dos.writeUTF(ten);
+					dos.writeUTF(tai);
+					DataInputStream dis = new DataInputStream(sc.getInputStream());
+				}
+
+				catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		});
+		btnNewButton_4.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				DataInputStream dis;
+				try {
+					dis = new DataInputStream(sc.getInputStream());
+
+					ten = (String) comboBox.getSelectedItem();
+					cl.show(contentPane, "name_55589903713200");
+					if (block.get(ten).equals("false"))
+						btnNewButton_5.setText("Block");
+					else
+						btnNewButton_5.setText("Unblock");
+					textArea.setText(message.get(ten));
+					text = message.get(ten);
+					lblNewLabel_8.setText(ten);
+
+					new Thread(() -> {
+						Socket sc1;
+
+						try {
+							sc1 = new Socket("169.254.165.83", 1134);
+							DataOutputStream dos1 = new DataOutputStream(sc1.getOutputStream());
+
+							dos1.writeUTF("status");
+
+							while (true) {
+
+								dos1.writeUTF(ten);
+								DataInputStream dis1 = new DataInputStream(sc1.getInputStream());
+								String sockett = dis1.readUTF();
+								if (sockett.equals("")) {
+									lblNewLabel_9.setText("offline");
+									lblNewLabel_9.setForeground(Color.gray);
+								} else {
+									lblNewLabel_9.setText("online");
+									lblNewLabel_9.setForeground(Color.green);
+								}
+
+							}
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}).start();
+
+					new Thread(() -> {
+
+						boolean loop = true;
+						while (loop)
+							try {
+
+								String message1 = dis.readUTF();
+								String nm = dis.readUTF();
+								String tb = dis.readUTF();
+								// System.out.println(message1);
+								System.out.println(nm);
+								System.out.println(tb);
+								if (tb.equals("block"))
+									block1.put(ten, "true");
+								if (tb.equals("unblock"))
+									block1.put(ten, "false");
+								if (nm.equals(ten)) {
+									if (!block.get(ten).equals("true") || !block1.get(ten).equals("true")) {
+										textArea.setText(message1);
+
+										text = message1;
+									}
+								}
+
+								comboBox.setEditable(false);
+								if (!nm.equals(ten)) {
+									if (block.get(ten).equals("true") || block1.get(ten).equals("true")) {
+										/*
+										 * JOptionPane.showMessageDialog(contentPane,
+										 * "Hien khong the chat voi nguoi dung nay");
+										 */
+									} else {
+
+										JOptionPane.showMessageDialog(contentPane, "Ban co tin nhan moi tu " + nm);
+										if (message.get(nm).length() != 0)
+											JOptionPane.showMessageDialog(contentPane, "Noi dung tin nhan:\n"
+													+ message1.substring(message.get(nm).length() + 2));
+										else
+											JOptionPane.showMessageDialog(contentPane,
+													"Noi dung tin nhan:\n" + message1.substring(0));
+										message.put(nm, message1);
+									}
+								}
+
+							} catch (IOException e1) {
+								loop = false;
+							}
+
+					}).start();
+
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		btnNewButton_3.addActionListener(ac);
 
 	}
 }
