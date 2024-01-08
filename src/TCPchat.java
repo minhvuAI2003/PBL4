@@ -318,8 +318,6 @@ public class TCPchat extends JFrame {
 				System.out.println(tk + " " + mk);
 				try {
 
-				
-
 					if (tk.equals("")) {
 						lblNewLabel_6.setText("Hãy nhập tên tài khoản!!!");
 						passwordField.setText("");
@@ -453,10 +451,19 @@ public class TCPchat extends JFrame {
 		;
 
 		btnNewButton_5.addActionListener(new ActionListener() {
+
 			int count = 1;
+
+			public void sua() {
+				if (btnNewButton_5.getText().equals("Unblock"))
+					count = 0;
+				else
+					count = 1;
+			}
 
 			public void actionPerformed(ActionEvent e) {
 				try {
+					sua();
 					if (count % 2 == 1) {
 						btnNewButton_5.setText("Unblock");
 					} else {
@@ -561,22 +568,22 @@ public class TCPchat extends JFrame {
 
 								comboBox.setEditable(false);
 								if (!nm.equals(ten)) {
-									if (block.get(ten).equals("true") || block1.get(ten).equals("true")) {
-										/*
-										 * JOptionPane.showMessageDialog(contentPane,
-										 * "Hien khong the chat voi nguoi dung nay");
-										 */
-									} else {
+//									if (block.get(ten).equals("true") || block1.get(ten).equals("true")) {
+//										/*
+//										 * JOptionPane.showMessageDialog(contentPane,
+//										 * "Hien khong the chat voi nguoi dung nay");
+//										 */
+//									} else {
 
-										JOptionPane.showMessageDialog(contentPane, "Ban co tin nhan moi tu " + nm);
-										if (message.get(nm).length() != 0)
-											JOptionPane.showMessageDialog(contentPane, "Noi dung tin nhan:\n"
-													+ message1.substring(message.get(nm).length() + 2));
-										else
-											JOptionPane.showMessageDialog(contentPane,
-													"Noi dung tin nhan:\n" + message1.substring(0));
-										message.put(nm, message1);
-									}
+									JOptionPane.showMessageDialog(contentPane, "Ban co tin nhan moi tu " + nm);
+									if (message.get(nm).length() != 0)
+										JOptionPane.showMessageDialog(contentPane, "Noi dung tin nhan:\n"
+												+ message1.substring(message.get(nm).length() + 2));
+									else
+										JOptionPane.showMessageDialog(contentPane,
+												"Noi dung tin nhan:\n" + message1.substring(0));
+									message.put(nm, message1);
+									// }
 								}
 
 							} catch (IOException e1) {
